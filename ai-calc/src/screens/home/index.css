@@ -1,0 +1,21 @@
+.color-palette {
+    display: flex;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.color-swatch {
+    flex: 0 0 auto;
+    margin-right: 8px;
+}
+
+@media (max-width: 600px) {
+    .color-palette {
+        flex-wrap: nowrap;
+    }
+
+    .color-swatch {
+        width: 50%;
+        box-sizing: border-box;
+    }
+}

@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import Draggable from "react-draggable";
 import { SWATCHES } from "../../../constants.ts";
+import "./index.css";
 // import { LazyBrush } from 'lazy-brush';
 
 interface GeneratedResult {
@@ -238,12 +239,13 @@ export default function Home() {
         >
           Reset
         </Button>
-        <Group className="z-20">
+        <Group className="z-20 color-palette">
           {SWATCHES.map((swatch) => (
             <ColorSwatch
               key={swatch}
               color={swatch}
               onClick={() => setColor(swatch)}
+              className="color-swatch"
             />
           ))}
         </Group>
