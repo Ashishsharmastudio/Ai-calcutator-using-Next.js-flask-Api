@@ -115,19 +115,25 @@ export default function Home() {
     }
   };
 
-  const startDrawing = (e: React.MouseEvent<HTMLCanvasElement>) => {
+  const startDrawing = (
+    e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>
+  ) => {
     const canvas = canvasRef.current;
     if (canvas) {
       canvas.style.background = "black";
       const ctx = canvas.getContext("2d");
       if (ctx) {
         ctx.beginPath();
-        ctx.moveTo(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
+        const { offsetX, offsetY } = getEventPosition(e);
+        ctx.moveTo(offsetX, offsetY);
         setIsDrawing(true);
       }
     }
   };
-  const draw = (e: React.MouseEvent<HTMLCanvasElement>) => {
+
+  const draw = (
+    e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>
+  ) => {
     if (!isDrawing) {
       return;
     }
@@ -136,13 +142,30 @@ export default function Home() {
       const ctx = canvas.getContext("2d");
       if (ctx) {
         ctx.strokeStyle = color;
-        ctx.lineTo(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
+        const { offsetX, offsetY } = getEventPosition(e);
+        ctx.lineTo(offsetX, offsetY);
         ctx.stroke();
       }
     }
   };
+
   const stopDrawing = () => {
     setIsDrawing(false);
+  };
+
+  const getEventPosition = (
+    e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>
+  ) => {
+    if (e.nativeEvent instanceof MouseEvent) {
+      return { offsetX: e.nativeEvent.offsetX, offsetY: e.nativeEvent.offsetY };
+    } else {
+      const touch = e.nativeEvent.touches[0];
+      const rect = (e.target as HTMLCanvasElement).getBoundingClientRect();
+      return {
+        offsetX: touch.clientX - rect.left,
+        offsetY: touch.clientY - rect.top,
+      };
+    }
   };
 
   const runRoute = async () => {
@@ -241,6 +264,9 @@ export default function Home() {
         onMouseMove={draw}
         onMouseUp={stopDrawing}
         onMouseOut={stopDrawing}
+        onTouchStart={startDrawing}
+        onTouchMove={draw}
+        onTouchEnd={stopDrawing}
       />
 
       {latexExpression &&
