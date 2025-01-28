@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import Draggable from "react-draggable";
 import { SWATCHES } from "../../../constants.ts";
-// import {LazyBrush} from 'lazy-brush';
+// import { LazyBrush } from 'lazy-brush';
 
 interface GeneratedResult {
   expression: string;
@@ -151,8 +151,7 @@ export default function Home() {
     if (canvas) {
       const response = await axios({
         method: "post",
-        // url: "http://localhost:8900/calculator/calculate",
-        url: `${import.meta.env.VITE_API_URL}/calculator/calculate`,
+        url: import.meta.env.VITE_API_URL + "/calculator/calculate",
         data: {
           image: canvas.toDataURL("image/png"),
           dict_of_vars: dictOfVars,
